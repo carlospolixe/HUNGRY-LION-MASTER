@@ -66,7 +66,7 @@ public class SanFermin2D extends Application {
         Image imagefondo = new Image(getClass().getResourceAsStream("imagen/fondo.png"));
         ImageView imageviewfondo = new ImageView(imagefondo);
         imageviewfondo.setFitHeight(768); 
-        imageviewfondo.setFitWidth(1370);
+        imageviewfondo.setFitWidth(1380);
         ImageView imageviewfondo2 = new ImageView(imagefondo);
         imageviewfondo2.setFitHeight(768); 
         imageviewfondo2.setFitWidth(1370);
@@ -81,7 +81,15 @@ public class SanFermin2D extends Application {
         imageviewcorredor .setY(520);
         
         
-                  
+        // ---------------------------imagen corredor en movimiento--------------------------------------------------------
+        Image imagenleon = new Image(getClass().getResourceAsStream("imagen/leon.gif"));
+        ImageView imageviewleon = new ImageView(imagenleon);
+        imageviewleon.setFitHeight(175); 
+        imageviewleon.setFitWidth(170);
+        imageviewleon .setX(-100);
+        imageviewleon .setY(520);
+        imageviewleon.setScaleX(2);
+        
 
             
         //------------------------------------animacion fondo--------------------------------------------------------------
@@ -95,7 +103,7 @@ public class SanFermin2D extends Application {
                     
                }
                 else {
-                    animationfondo = animationfondo - 2;
+                    animationfondo = animationfondo - 6;
                     imageviewfondo.setX(animationfondo);
                 };
                 if (imageviewfondo2.getX()<-1365){
@@ -104,7 +112,7 @@ public class SanFermin2D extends Application {
                     
                }
                 else {
-                    animationfondo2 = animationfondo2 - 2;
+                    animationfondo2 = animationfondo2 - 6;
                     imageviewfondo2.setX(animationfondo2);
                 };
                 
@@ -161,7 +169,7 @@ public class SanFermin2D extends Application {
           
             
         Pane root = new Pane();
-            root.getChildren().addAll(imageviewfondo, imageviewfondo2, imageviewcorredor, groupvalla );
+            root.getChildren().addAll(imageviewfondo, imageviewfondo2, imageviewcorredor,imageviewleon, groupvalla );
         
        
         animacionTotal.start();
