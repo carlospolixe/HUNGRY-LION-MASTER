@@ -34,8 +34,6 @@ public class SanFermin2D extends Application {
     int corredorEjeX = 0;
     int corredorEjeY = 0;
     int velocidad = 0;
-    //--------------------------
-  
     //--public boolean juegoFinalizado=false;
 
     
@@ -46,8 +44,8 @@ public class SanFermin2D extends Application {
         Polygon valla = new Polygon (new double[]{
             0, 40,
             0, 85,
-            60, 60});
-        valla.setFill(Color.BLUEVIOLET);
+            65, 65});
+        valla.setFill(Color.BROWN);
         
         
         valla.setLayoutX(1000);
@@ -65,7 +63,7 @@ public class SanFermin2D extends Application {
             
        
         //--------------------------------imagen fondo----------------------------------------------------------------------
-        Image imagefondo = new Image(getClass().getResourceAsStream("imagen/fondo.jpg"));
+        Image imagefondo = new Image(getClass().getResourceAsStream("imagen/fondo.png"));
         ImageView imageviewfondo = new ImageView(imagefondo);
         imageviewfondo.setFitHeight(768); 
         imageviewfondo.setFitWidth(1370);
@@ -77,7 +75,7 @@ public class SanFermin2D extends Application {
         // ---------------------------imagen corredor en movimiento--------------------------------------------------------
         Image imagecorredor = new Image(getClass().getResourceAsStream("imagen/corriendo.gif"));
         ImageView imageviewcorredor = new ImageView(imagecorredor);
-        imageviewcorredor.setFitHeight(170); 
+        imageviewcorredor.setFitHeight(175); 
         imageviewcorredor.setFitWidth(170);
         imageviewcorredor .setX(200);
         imageviewcorredor .setY(520);
@@ -124,7 +122,7 @@ public class SanFermin2D extends Application {
                 
                 if (corredorEjeY <= -100){
                     
-                    velocidad=1;
+                    velocidad=2;
                     
                 }
                 if (corredorEjeY == 0){
