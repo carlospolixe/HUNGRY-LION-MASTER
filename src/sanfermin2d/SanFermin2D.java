@@ -16,6 +16,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -24,7 +28,7 @@ import javafx.stage.Stage;
  */
 public class SanFermin2D extends Application {
         
-    // Variables usadas en el movimiento de la valla
+    // ---------------------------Variables usadas 
     int movimientovallaX = 0;
     int movimientovallaY = 0;
     int cambioEjeX = 0;
@@ -39,18 +43,19 @@ public class SanFermin2D extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        //------------------------valla--------------------------------------------------------------------------
+        //------------------------Creacion valla--------------------------------------------------------------------------
         Pane root2 = new Pane();
         Polygon valla = new Polygon (new double[]{
             0, 40,
             0, 85,
             65, 65});
-        valla.setFill(Color.BROWN);
+        valla.setFill(Color.DARKGREY);
         
         
         valla.setLayoutX(1000);
         valla.setLayoutY(575);
         Random vallaaleatoria = new Random();
+        
         
         //------------------------grupo valla--------------------------------------------------------------------
         Group groupvalla = new Group ();
@@ -75,13 +80,20 @@ public class SanFermin2D extends Application {
         // ---------------------------imagen corredor en movimiento--------------------------------------------------------
         Image imagecorredor = new Image(getClass().getResourceAsStream("imagen/corriendo.gif"));
         ImageView imageviewcorredor = new ImageView(imagecorredor);
+        Rectangle rectangleBoy = new Rectangle (32, 111);
+        rectangleBoy.setX(200);
+        rectangleBoy.setY(540);
+        rectangleBoy.setVisible(false);
+        rectangleBoy.setFill(Color.BLACK);
         imageviewcorredor.setFitHeight(175); 
         imageviewcorredor.setFitWidth(170);
-        imageviewcorredor .setX(200);
+        imageviewcorredor .setX(120);
         imageviewcorredor .setY(520);
         
+        Group groupMuñeco = new Group ();
+            groupMuñeco.getChildren().addAll(rectangleBoy, imageviewcorredor);
         
-        // ---------------------------imagen corredor en movimiento--------------------------------------------------------
+        // ---------------------------imagen leon en movimiento--------------------------------------------------------
         Image imagenleon = new Image(getClass().getResourceAsStream("imagen/leon.gif"));
         ImageView imageviewleon = new ImageView(imagenleon);
         imageviewleon.setFitHeight(175); 
@@ -126,7 +138,7 @@ public class SanFermin2D extends Application {
             @Override
             public void handle (long now) {
                 corredorEjeY = velocidad + corredorEjeY;
-                imageviewcorredor.setLayoutY(corredorEjeY);
+                groupMuñeco.setLayoutY(corredorEjeY);
                 
                 if (corredorEjeY <= -100){
                     
@@ -139,13 +151,21 @@ public class SanFermin2D extends Application {
                     
                 }
             }     
-        };
+        }; 
+        Text derrota = new Text ("GAME OVER");
+        derrota.setFont(Font.font(160));
+        derrota.setX(220);
+        derrota.setY(400);
+            derrota.setFill(Color.BLACK);
+       
+                  
+         
         //------------------------------------animacion valla--------------------------------------------------------------
           AnimationTimer animationvalla = new AnimationTimer (){
             
             @Override
             public void handle (long now) { 
-                //------------valla aletoria----------------
+                //-----------------------------valla aletoria---------------------------------------------------
                 movimientovallaX --;
                 groupvalla.setLayoutY(movimientovallaY);
                  
@@ -169,9 +189,32 @@ public class SanFermin2D extends Application {
           
             
         Pane root = new Pane();
-            root.getChildren().addAll(imageviewfondo, imageviewfondo2, imageviewcorredor,imageviewleon, groupvalla );
-        
-       
+            root.getChildren().addAll(imageviewfondo, imageviewfondo2,imageviewleon, groupvalla,groupMuñeco);
+            
+         AnimationTimer animationDerrota = new AnimationTimer (){
+           @Override
+            public void handle (long now) { 
+                
+            }
+         
+        };
+            
+        //------------------------CHOQUE----------------------------------------------------------------------------------
+        AnimationTimer animationchoque = new AnimationTimer (){
+           @Override
+            public void handle (long now) { 
+              Shape shapeColision = Shape.intersect(rectangleBoy , valla);
+              boolean colisionShapeA = shapeColision.getBoundsInLocal().isEmpty();
+                       if(colisionShapeA == false){
+                             root.getChildren().add(derrota);
+                             this.stop();
+                       }
+            } 
+         
+        };
+            
+        animationDerrota.start();
+        animationchoque.start();
         animacionTotal.start();
         animationvalla.start();
         animationcorredor.start();
@@ -189,7 +232,7 @@ public class SanFermin2D extends Application {
             switch(teclapulsada.getCode()) {
                 
                 case UP:
-                        velocidad =  - 2;
+                        velocidad =  - 3;
                     break;
                
                
@@ -206,11 +249,22 @@ public class SanFermin2D extends Application {
    
     }
 
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    public void reinicio (){
+        movimientovallaX = 0;
+        movimientovallaY = 0;
+        cambioEjeX = 0;
+        cambioEjeY = 0;
+        corredorEjeX = 0;
+        corredorEjeY = 0;
+        velocidad = 0;
     }
     
 }
