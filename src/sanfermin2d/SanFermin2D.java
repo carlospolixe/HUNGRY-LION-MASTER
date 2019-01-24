@@ -38,31 +38,67 @@ public class SanFermin2D extends Application {
     int corredorEjeX = 0;
     int corredorEjeY = 0;
     int velocidad = 0;
+    float groupVallaX1 = 700;
+    float groupVallaX2 = 1200;
+    float groupVallaX3 = 1700;
+    float dificultad = 6;
     //--public boolean juegoFinalizado=false;
 
-    
+    Random randomValla = new Random();
+        
     @Override
     public void start(Stage primaryStage) {
-        //------------------------Creacion valla--------------------------------------------------------------------------
+        
+        //------------------------Creacion valla1--------------------------------------------------------------------------
         Pane root2 = new Pane();
         Polygon valla = new Polygon (new double[]{
             0, 40,
             0, 85,
             65, 65});
-        valla.setFill(Color.DARKGREY);
+        valla.setFill(Color.DIMGRAY);
         
-        
-        valla.setLayoutX(1000);
         valla.setLayoutY(575);
-        Random vallaaleatoria = new Random();
+        randomValla = new Random();
+        //--------------------------valla2--------------------------------------------------------
+        Pane root3 = new Pane();
+        Polygon valla2 = new Polygon (new double[]{
+            0, 40,
+            0, 85,
+            65, 65});
+        valla2.setFill(Color.DIMGRAY);
+        
+        valla2.setLayoutY(575);
+         //--------------------------valla3--------------------------------------------------------
+         Pane root4 = new Pane();
+         Polygon valla3 = new Polygon (new double[]{
+            0, 40,
+            0, 85,
+            65, 65});
+        valla3.setFill(Color.DIMGRAY);
+        
+        valla3.setLayoutY(575);
         
         
-        //------------------------grupo valla--------------------------------------------------------------------
+        
+        //------------------------grupo valla1--------------------------------------------------------------------
         Group groupvalla = new Group ();
             groupvalla.getChildren().addAll(valla);
             groupvalla.setRotate(-90);
             groupvalla.setScaleX(0.8);
             groupvalla.setScaleY(0.8);
+        //------------------------grupo valla2--------------------------------------------------------------------  
+        Group groupvalla2 = new Group ();
+            groupvalla2.getChildren().addAll(valla2);
+            groupvalla2.setRotate(-90);
+            groupvalla2.setScaleX(0.8);
+            groupvalla2.setScaleY(0.8);
+         //------------------------grupo valla3--------------------------------------------------------------------   
+        Group groupvalla3 = new Group ();
+            groupvalla3.getChildren().addAll(valla3);
+            groupvalla3.setRotate(-90);
+            groupvalla3.setScaleX(0.8);
+            groupvalla3.setScaleY(0.8);
+            
             
            
             
@@ -164,32 +200,29 @@ public class SanFermin2D extends Application {
           AnimationTimer animationvalla = new AnimationTimer (){
             
             @Override
-            public void handle (long now) { 
-                //-----------------------------valla aletoria---------------------------------------------------
-                movimientovallaX --;
-                groupvalla.setLayoutY(movimientovallaY);
-                 
-                if (cambioEjeX == 0) {
-                    groupvalla.setLayoutX(movimientovallaX);
-                    movimientovallaX--;
-                    if (movimientovallaX > 900) {
-                        cambioEjeX = 1;
-                    };
+            public void handle (long now) {
+                //-------------dificultad-------------------------------------
+                groupVallaX1 = groupVallaX1 - dificultad;
+                groupvalla.setLayoutX(groupVallaX1);
+                groupVallaX2 = groupVallaX2 - dificultad;
+                groupvalla2.setLayoutX(groupVallaX2);
+                groupVallaX3 = groupVallaX3 - dificultad;
+                groupvalla3.setLayoutX(groupVallaX3);
+                
+                 if (groupVallaX1<-30) {
+                    groupVallaX1 = randomValla.nextInt(50) + 1500;
                 }
-                else {
-                    groupvalla.setLayoutX(movimientovallaX);
-                    movimientovallaX++;
-                    if (movimientovallaX < 1) {
-                        cambioEjeX = 0;
-                    };                        
-                };
-               
-            };
-        };
-          
+                if (groupVallaX2<-30) {
+                    groupVallaX2 = randomValla.nextInt(50) + 1500;
+                }
+                if (groupVallaX3<-30) {
+                    groupVallaX3 = randomValla.nextInt(50) + 1500;
+                }
+            }
+          };
             
         Pane root = new Pane();
-            root.getChildren().addAll(imageviewfondo, imageviewfondo2,imageviewleon, groupvalla,groupMuñeco);
+            root.getChildren().addAll(imageviewfondo, imageviewfondo2,imageviewleon, groupvalla,groupvalla2,groupvalla3,groupMuñeco);
             
          AnimationTimer animationDerrota = new AnimationTimer (){
            @Override
@@ -212,27 +245,54 @@ public class SanFermin2D extends Application {
             } 
          
         };
+         //------------------------CHOQUE2----------------------------------------------------------------------------------
+        AnimationTimer animationchoque2 = new AnimationTimer (){
+           @Override
+            public void handle (long now) { 
+              Shape shapeColision = Shape.intersect(rectangleBoy , valla2);
+              boolean colisionShapeA = shapeColision.getBoundsInLocal().isEmpty();
+                       if(colisionShapeA == false){
+                             root.getChildren().add(derrota);
+                             this.stop();
+                       }
+            } 
+         
+        };
+         //------------------------CHOQUE3----------------------------------------------------------------------------------
+        AnimationTimer animationchoque3 = new AnimationTimer (){
+           @Override
+            public void handle (long now) { 
+              Shape shapeColision = Shape.intersect(rectangleBoy , valla3);
+              boolean colisionShapeA = shapeColision.getBoundsInLocal().isEmpty();
+                       if(colisionShapeA == false){
+                             root.getChildren().add(derrota);
+                             this.stop();
+                       }
+            } 
+         
+        };
             
         animationDerrota.start();
         animationchoque.start();
+        animationchoque2.start();
+        animationchoque3.start();
         animacionTotal.start();
         animationvalla.start();
+       // animationvalla2.start();
+        //animationvalla3.start();
         animationcorredor.start();
         
         Scene scene = new Scene(root, 1366, 720);
         
         //------------------------PULSACION DE LA TECLA-------------------------------------------
         
-        scene.setOnKeyReleased((KeyEvent teclasoltada) -> {
-            
-            //velocidad = 0;           
-        });
+        
         scene.setOnKeyPressed((KeyEvent teclapulsada) -> {
             
             switch(teclapulsada.getCode()) {
                 
                 case UP:
-                        velocidad =  - 3;
+                        velocidad =  - 6;
                     break;
                
                
@@ -266,5 +326,8 @@ public class SanFermin2D extends Application {
         corredorEjeY = 0;
         velocidad = 0;
     }
-    
+   public void cargarvalla(String num){
+       String nombre = ("valla" + num);
+       //valla nombre = new valla();
+   } 
 }
